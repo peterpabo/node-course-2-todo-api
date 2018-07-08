@@ -70,9 +70,33 @@ UserSchema.methods.generateAuthToken = function() {
     return user.save().then(() => { //!!! Promise
         return token;
     });
-
-
 };
+
+
+UserSchema.statics.findByToken = function(token) {              //like methods, but it's MODEL not INSTANCE
+    var User = this;                                            //uppercase User
+    var decoded;
+
+    try{
+        decoded = jwt.verify(token, 'abc123');
+    } catch(e){
+
+
+        // return new Promise((resolve, reject) => {
+        //     reject();
+        // });
+        return Promise.reject();//reject(value) => value will be used as the catch((e))
+
+
+    }
+
+    return User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    });
+};
+
 
 var User = mongoose.model('User', UserSchema);
 
