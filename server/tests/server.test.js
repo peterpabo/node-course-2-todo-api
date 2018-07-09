@@ -291,7 +291,7 @@ describe('POST /users/login', () => {
                 }).catch((e) => done(e));
             });
     });
-    it('', (done) => {
+    it('should reject invalid login', (done) => {
 
         request(app)
             .post('/users/login')
