@@ -55,10 +55,9 @@ UserSchema.methods.toJSON = function() {    //limit data send back to client and
 UserSchema.methods.generateAuthToken = function() {
     var user = this;
     var access = 'auth';
-    var token = jwt.sign({_id: user._id.toHexString(), access },'abc123').toString();
+    var token = jwt.sign({_id: user._id.toHexString(), access }, process.env.JWT_SECRET).toString();//    var token = jwt.sign({_id: user._id.toHexString(), access }, 'abc123').toString();
 
     user.tokens = user.tokens.concat([{access, token}]);//user.tokens.push({access, token});    //used for mongo several versions.
-
 
 /*
     user.save().then(() => {
@@ -78,8 +77,8 @@ UserSchema.statics.findByToken = function(token) {              //like methods, 
     var User = this;                                            //uppercase User
     var decoded;
 
-    try{
-        decoded = jwt.verify(token, 'abc123');
+    try{        
+        decoded = jwt.verify(token, process.env.JWT_SECRET);//        decoded = jwt.verify(token, 'abc123');
     } catch(e){
 
 
